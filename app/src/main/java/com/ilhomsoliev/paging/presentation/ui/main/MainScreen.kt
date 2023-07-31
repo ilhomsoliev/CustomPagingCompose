@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
@@ -42,7 +43,8 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun MainScreen(
-    vm: MainViewModel
+    vm: MainViewModel,
+    navController: NavController,
 ) {
 
     val charactersPagingState by vm.charactersPagingState.collectAsState()
@@ -69,7 +71,7 @@ fun MainScreen(
                         .clip(RoundedCornerShape(14.dp))
                         .background(MaterialTheme.colorScheme.surface)
                         .clickable {
-                            // Navigate
+                            navController.navigate("details/${item.id}")
                         }, characterModel = item
 
                 )
@@ -95,22 +97,28 @@ fun CharacterItem(
     characterModel: CharacterModel
 ) {
     Row(modifier = modifier) {
+        /*val thumbnailRequest = Glide.with(LocalContext.current)
+            .asBitmap()
+            .load("https://picsum.photos/50/50?image=0")*/
         GlideImage(
             imageModel = characterModel.image,
             requestBuilder = Glide
                 .with(LocalContext.current)
                 .asBitmap()
-                .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                .thumbnail(0.6f)
+                .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
+                .autoClone()
+                //.thumbnail(thumbnailRequest)
                 .transition(withCrossFade()),
+
             modifier = Modifier.width(160.dp),
             shimmerParams = ShimmerParams(
-                baseColor = MaterialTheme.colorScheme.surface, // TODO
-                highlightColor = MaterialTheme.colorScheme.primary // TODO
+                baseColor = MaterialTheme.colorScheme.surface,
+                highlightColor = MaterialTheme.colorScheme.primary
             ),
             failure = {
                 Text(text = "image request failed.")
             })
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,10 +147,6 @@ fun CharacterItem(
                 Text(text = "Last known location:")
                 Text(text = characterModel.location)
             }
-
-            /*// First seen
-            Text(text = "First seen in:")
-            Text(text = if (characterModel.episode.isNotEmpty()) characterModel.episode[0] else "Unknown")*/
 
         }
     }

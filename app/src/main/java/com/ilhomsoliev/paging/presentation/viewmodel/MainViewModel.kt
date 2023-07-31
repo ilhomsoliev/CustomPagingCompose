@@ -31,14 +31,13 @@ class MainViewModel(
         _charactersPagingState.emit(_charactersPagingState.value.copy(onFetchData = { page ->
             val result = repository.getCharacters(
                 page = page,
-                //perPage = 15,
             )
             result
         }))
 
 
         _charactersPagingState.emit(_charactersPagingState.value.copy(onError = { cause: String? ->
-            // errorNetworkMessage.value = cause
+
         }))
         onNewPosition(0)
     }

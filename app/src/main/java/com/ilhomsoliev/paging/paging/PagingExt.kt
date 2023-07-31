@@ -59,6 +59,8 @@ data class PagingState<T>(
 
                 } catch (e: Exception) {
                     onError?.let { it(e.message) }
+                    onUpdate(this.copy(isLoading = false));
+
                 }
             }
         }

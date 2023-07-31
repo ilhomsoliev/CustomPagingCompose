@@ -1,11 +1,12 @@
 package com.ilhomsoliev.paging.app
 
 import android.app.Application
-import com.ilhomsoliev.paging.data.repository.Repository
-import com.ilhomsoliev.paging.data.repository.RepositoryImpl
-import com.ilhomsoliev.paging.presentation.viewmodel.MainViewModel
 import com.ilhomsoliev.paging.data.network.BASE_URL
 import com.ilhomsoliev.paging.data.network.ServerApi
+import com.ilhomsoliev.paging.data.repository.Repository
+import com.ilhomsoliev.paging.data.repository.RepositoryImpl
+import com.ilhomsoliev.paging.presentation.viewmodel.DescriptionViewModel
+import com.ilhomsoliev.paging.presentation.viewmodel.MainViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -38,6 +39,7 @@ class PagingApplication : Application() {
 
 val viewModelModule = module {
     viewModel { MainViewModel(get()) }
+    viewModel { DescriptionViewModel(get()) }
 }
 val repositoryModule = module {
     single<Repository> { RepositoryImpl(get()) }
